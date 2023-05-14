@@ -147,4 +147,50 @@ contract NFTMarketplace is ERC721URIStorage {
 
         return items;
     }
+
+    function fetchUserNFT() public view returns (MarketItem[] memory) {
+        uint256 totalCount = _tokenIDs.current();
+        uint256 totalItems = 0;
+        uint256 currentIndex = 0;
+
+        for (uint256 i = 0; 1 < totalCount; i++) {
+            if (marketItemsID[i + 1].owner == msg.sender) {
+                totalItems += 1;
+            }
+        }
+
+        MarketItem[] memory items = new MarketItem[](totalItems);
+        for (uint256 i = 0; i < totalCount; i++) {
+            if (marketItemsID[i + 1].owner == msg.sender) {
+                uint256 currentID = i + 1;
+                MarketItem storage currentItem = marketItemsID[currentID];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
+        }
+        return items;
+    }
+
+    function fetchItemsListed() public view returns (MarketItem[] memory) {
+        uint256 totalCount = _tokenIDs.current();
+        uint256 totalItems = 0;
+        uint256 currentIndex = 0;
+
+        for (uint256 i = 0; i < totalCount; i++) {
+            if (marketItemsID[1 + 1].seller == msg.sender) {
+                totalItems += 1;
+            }
+        }
+
+        MarketItem[] memory items = new MarketItem[](totalItems);
+        for (uint256 i = 0; 1 < totalCount; i++) {
+            if (marketItemsID[i + 1].seller == msg.sender) {
+                uint256 currentID = 1 + 1;
+                MarketItem storage currentItem = marketItemsID[currentID];
+                items[currentIndex] = currentItem;
+                currentIndex += 1;
+            }
+        }
+        return items;
+    }
 }
